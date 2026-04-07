@@ -17,7 +17,7 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);                         // Définition de
 bool initd = true;
 float h = 30;
 float t = 30;
-float time_since_init = 0;
+int time_since_init = 0;
 
 /*const int color R = 255; // initialisation de la couleur rouge à 255
 const int colorG = 0;   // initialisation de la couleur verte à 0
@@ -38,12 +38,7 @@ void setup() {
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
 void loop() {
- EVERY_N_MILLISECONDS( 1 ) {
-  if (initd == true) {                                         // Tempo quand init
-    digitalWrite(13, LOW);                                     // envoie pas le courant dans pin 13
-    delay(750);                                                // Délai de tempo
-    initd = false;                                             // Pour exec 1x
-  }
+
   float h = dht.readHumidity();                                //définition d'un réel h qui a pour valeur l'humidité mesurée
   float t = dht.readTemperature();                             //définition d'un réel t qui a pour valeur la température mesurée
   
@@ -63,7 +58,6 @@ void loop() {
     lcd.print(h);                                                //
     lcd.print(" % ");                                            //***********************************************************
     }
-  //delay(500);    // attendre 500 ms
 
   // Call the current pattern function once, updating the 'leds' array  
   if (h > 37) fill_solid(leds, NUM_LEDS, CRGB::Red);
@@ -76,10 +70,10 @@ void loop() {
 
   // do some periodic updates
   EVERY_N_MILLISECONDS( 10 ) { gHue=gHue+2; } // slowly cycle the "base color" through the rainbow
- }
- EVERY_N_MILLISECONDS( 1 ) { time_since_init++; } //get time i guess ????
- EVERY_N_MILLISECONDS( 1500 ) {
+ 
+  time_since_init++;  //get time i guess ????
+  delay(1);
   if (h > 33) digitalWrite(13, HIGH);                                    // envoie le courant dans pin 13
-  else digitalWrite(13, LOW);  }
+  else digitalWrite(13, LOW);  
   
 }
