@@ -17,7 +17,10 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);                         // Définition de
 bool initd = true;
 float h = 30;
 float t = 30;
-int time_since_init = 0;
+unsigned long time_since_init = millis();           //on remplace par millis() qui fait la mm chose de maniere moins ghetto TwT
+unsigned long n_incr = 0;
+float croissance = 0;
+unsigned long temps_ouverture = 10000;
 
 /*const int color R = 255; // initialisation de la couleur rouge à 255
 const int colorG = 0;   // initialisation de la couleur verte à 0
@@ -38,17 +41,17 @@ void setup() {
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
 void loop() {
-
+  time_since_init = millis();
   float h = dht.readHumidity();                                //définition d'un réel h qui a pour valeur l'humidité mesurée
   float t = dht.readTemperature();                             //définition d'un réel t qui a pour valeur la température mesurée
   
-  Serial.print("Humidity : ");
-  Serial.println(h);                                           // affichage de l'humidité dans le moniteur série 
-  Serial.print("Temperature: ");
-  Serial.println(t);                                           // affichage de la température dans le moniteur série
-
   //lcd.clear();
-  if (time_since_init % 500 == 0){
+  if (time_since_init % 12 == 0){
+    Serial.print("Humidity : ");
+    Serial.println(h);                                           // affichage de l'humidité dans le moniteur série 
+    Serial.print("Temperature: ");
+    Serial.println(t);                                           // affichage de la température dans le moniteur série
+
     lcd.setCursor(0, 0);                                         //***********************************************************
     lcd.print("Temp = ");                                        //
     lcd.print(t);                                                //           Affiche les données temp et hum
@@ -57,6 +60,12 @@ void loop() {
     lcd.print(" Hum = ");                                        //
     lcd.print(h);                                                //
     lcd.print(" % ");                                            //***********************************************************
+
+    n_incr++;
+    croissance = (croissance*n_incr+t)/(n_incr+1);
+    Serial.print("k_croissance: ");                             //moyenne de la temperature depuis allumage
+    Serial.println(croissance);
+    if (time_since_init == temps_ouverture) allumage_servo();
     }
 
   // Call the current pattern function once, updating the 'leds' array  
@@ -69,11 +78,16 @@ void loop() {
   FastLED.delay(1000/FRAMES_PER_SECOND); 
 
   // do some periodic updates
-  EVERY_N_MILLISECONDS( 10 ) { gHue=gHue+2; } // slowly cycle the "base color" through the rainbow
+  EVERY_N_MILLISECONDS( 10 ) { gHue=gHue+3; } // slowly cycle the "base color" through the rainbow
  
-  time_since_init++;  //get time i guess ????
+  //time_since_init++;  //get time i guess ????
   delay(1);
   if (h > 33) digitalWrite(13, HIGH);                                    // envoie le courant dans pin 13
   else digitalWrite(13, LOW);  
   
+}
+// %25 = tt les 1s je crois
+void allumage_servo() {
+    //methode servo a implementer
+  }
 }
