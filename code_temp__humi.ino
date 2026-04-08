@@ -34,6 +34,8 @@ void setup() {
   lcd.begin(16, 2);                                            // initialisation d'un lcd à 16 colonnes et 2 lignes
   lcd.print(" hello, world ! ");                               // test du LCD
   pinMode(13, OUTPUT);                                         // pin 13 convertie en sortie électrique pour par exemple alimenter un ventilo
+  pinMode(10, INPUT);                                         
+  pinMode(9, INPUT);                                           //boutons
 
   FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip); // pour init fastled avec les données
   FastLED.setBrightness(BRIGHTNESS);                           // set master brightness control
@@ -81,13 +83,21 @@ void loop() {
   EVERY_N_MILLISECONDS( 10 ) { gHue=gHue+3; } // slowly cycle the "base color" through the rainbow
  
   //time_since_init++;  //get time i guess ????
-  delay(1);
   if (h > 33) digitalWrite(13, HIGH);                                    // envoie le courant dans pin 13
   else digitalWrite(13, LOW);  
+
+  val_tiroirs = digitalRead(9);
+  val_dechets = digitalRead(10);
+  if (val_tiroirs == HIGH) allumage_servo();
+  if (val_dechets == HIGH) trappe_dechets();
   
 }
 // %25 = tt les 1s je crois
+
 void allumage_servo() {
     //methode servo a implementer
-  }
+}
+
+void trappe_dechets() {
+    //methode servo a implementer
 }
