@@ -2,6 +2,7 @@
 #include <Wire.h>                                              // chargement des bibliothèques de fonctions de l'écran
 #include <LiquidCrystal.h>                                     // Controle de LCD
 #include <FastLED.h>                                           // Librairie généraliste pour gérer le RGB
+#include <Servo.h>
 
 #define DATA_PIN    7                                          // pin 7 pour le rgb
 #define LED_TYPE    WS2811                                   //*************************************
@@ -21,10 +22,15 @@ unsigned long time_since_init = millis();           //on remplace par millis() q
 unsigned long n_incr = 0;
 float croissance = 0;
 unsigned long temps_ouverture = 10000;
-
+bool val_tiroirs = digitalRead(9);
+bool val_dechets = digitalRead(10);
 /*const int color R = 255; // initialisation de la couleur rouge à 255
 const int colorG = 0;   // initialisation de la couleur verte à 0
 const int colorB = 0;   // initialisation de la couleur bleue à 0 */
+Servo servo_dechets;  // create servo object to control a servo
+Servo servo1_tiroirs;  // create servo object to control a servo
+bool check_d = false;
+bool check_t = false;
 
 
 void setup() {
@@ -39,6 +45,9 @@ void setup() {
 
   FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip); // pour init fastled avec les données
   FastLED.setBrightness(BRIGHTNESS);                           // set master brightness control
+
+  servo_dechets.attach(22);  // attaches the servo on pin to the servo object
+  servo1_tiroirs.attach(23); 
 }
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
@@ -67,7 +76,6 @@ void loop() {
     croissance = (croissance*n_incr+t)/(n_incr+1);
     Serial.print("k_croissance: ");                             //moyenne de la temperature depuis allumage
     Serial.println(croissance);
-    if (time_since_init == temps_ouverture) allumage_servo();
     }
 
   // Call the current pattern function once, updating the 'leds' array  
@@ -88,16 +96,21 @@ void loop() {
 
   val_tiroirs = digitalRead(9);
   val_dechets = digitalRead(10);
-  if (val_tiroirs == HIGH) allumage_servo();
-  if (val_dechets == HIGH) trappe_dechets();
-  
+  if (val_tiroirs == HIGH and check_t==false) {
+    servo1_tiroirs.write(90);
+    check_t=true;
+  }
+  else if (val_tiroirs== LOW){
+    servo1_tiroirs.write(0);
+    check_t=false;
+  }
+  if (val_dechets == HIGH and check_d==false) {
+    servo_dechets.write(90);
+    check_t=true;
+  }
+  else if (val_tiroirs== LOW){
+    servo_dechets.write(0);
+    check_t=false;
+  }
 }
 // %25 = tt les 1s je crois
-
-void allumage_servo() {
-    //methode servo a implementer
-}
-
-void trappe_dechets() {
-    //methode servo a implementer
-}
