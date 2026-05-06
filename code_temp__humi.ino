@@ -22,8 +22,8 @@ unsigned long time_since_init = millis();           //on remplace par millis() q
 unsigned long n_incr = 0;
 float croissance = 0;
 unsigned long temps_ouverture = 10000;
-bool val_tiroirs = digitalRead(9);
-bool val_dechets = digitalRead(10);
+bool val_tiroirs = digitalRead(44);
+bool val_dechets = digitalRead(45);
 /*const int color R = 255; // initialisation de la couleur rouge à 255
 const int colorG = 0;   // initialisation de la couleur verte à 0
 const int colorB = 0;   // initialisation de la couleur bleue à 0 */
@@ -46,8 +46,8 @@ void setup() {
   FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip); // pour init fastled avec les données
   FastLED.setBrightness(BRIGHTNESS);                           // set master brightness control
 
-  servo_dechets.attach(22);  // attaches the servo on pin to the servo object
-  servo1_tiroirs.attach(23); 
+  servo_dechets.attach(9);  // attaches the servo on pin 9 to the servo object
+  servo1_tiroirs.attach(10);  // attaches the servo on pin 9 to the servo object
 }
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
@@ -94,23 +94,23 @@ void loop() {
   if (h > 33) digitalWrite(13, HIGH);                                    // envoie le courant dans pin 13
   else digitalWrite(13, LOW);  
 
-  val_tiroirs = digitalRead(9);
-  val_dechets = digitalRead(10);
-  if (val_tiroirs == HIGH and check_t==false) {
+  val_tiroirs = digitalRead(44);
+  val_dechets = digitalRead(45);
+  if (val_tiroirs == 1) {
     servo1_tiroirs.write(90);
-    check_t=true;
+    /check_t=true;
   }
-  else if (val_tiroirs== LOW){
+  else {
     servo1_tiroirs.write(0);
     check_t=false;
   }
-  if (val_dechets == HIGH and check_d==false) {
+  if (val_dechets == HIGH and check_t==false) {
     servo_dechets.write(90);
-    check_t=true;
+    //check_d=true;
   }
-  else if (val_tiroirs== LOW){
+  else {
     servo_dechets.write(0);
-    check_t=false;
+    //check_d=false;
   }
 }
 // %25 = tt les 1s je crois
