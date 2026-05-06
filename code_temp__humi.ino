@@ -98,7 +98,7 @@ void loop() {
   val_dechets = digitalRead(45);
   if (val_tiroirs == 1) {
     servo1_tiroirs.write(90);
-    /check_t=true;
+    check_t=true;
   }
   else {
     servo1_tiroirs.write(0);
