@@ -9,7 +9,8 @@ This is the software part of the Vermirefuge, to be televersed in an Arduino car
 
 - [X] ~~**LCD**: Configure the LCD screen~~ 
 - [X] Add a var to store past temperatures (smth like past_t = temp * k every second)
-- [ ] **Motors**: Configure and define the servos to open if past_t = smth
+- [X] **Motors**: Configure and define the servos to open if past_t = smth
+- [X] **Manual behavior activation**: buttons!!!
 - [ ] **RGB signals**: Add different RGB effects to the fans and associate a clear meaning with it
 - [ ] **Real-time Monitoring**: Code an app (crazy...)
 - [ ] **Temp Management**: Get a remotely controllable potentiometer to change temperature (_+hardware_)
