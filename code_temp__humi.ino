@@ -40,8 +40,8 @@ void setup() {
   lcd.begin(16, 2);                                            // initialisation d'un lcd à 16 colonnes et 2 lignes
   lcd.print(" hello, world ! ");                               // test du LCD
   pinMode(13, OUTPUT);                                         // pin 13 convertie en sortie électrique pour par exemple alimenter un ventilo
-  pinMode(10, INPUT);                                         
-  pinMode(9, INPUT);                                           //boutons
+  pinMode(44, INPUT);                                         
+  pinMode(45, INPUT);                                           //boutons
 
   FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip); // pour init fastled avec les données
   FastLED.setBrightness(BRIGHTNESS);                           // set master brightness control
